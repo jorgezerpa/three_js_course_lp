@@ -1,5 +1,5 @@
 import './style.css'
-import { HeroTemplate } from './templates/hero'
+import { HeroTemplate, heroLogic } from './templates/hero'
 import { Video } from './templates/video'
 import { CourseSections } from './templates/courseSections'
 import { About } from './templates/about'
@@ -10,7 +10,7 @@ import { Footer } from './templates/footer'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
-    ${HeroTemplate}
+    ${HeroTemplate()}
     ${Video}
     ${CourseSections}
     ${About}
@@ -20,5 +20,16 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     ${Footer}
   </div>
 `
+
+
+// Call the heroLogic function after the DOM has loaded
+window.addEventListener('DOMContentLoaded', () => {
+  heroLogic();
+});
+
+
+
+
+
 
 

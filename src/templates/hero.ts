@@ -1,4 +1,7 @@
-export const HeroTemplate = `
+// import * as THREE from 'three'
+import * as t from 'three';
+
+export const HeroTemplate = () => `
 <div class="leading-normal tracking-normal text-indigo-400 p-6 bg-cover bg-fixed" style="background-image: url('/header.png');">
 <div class="h-full">
   <!--Nav-->
@@ -46,11 +49,61 @@ export const HeroTemplate = `
     </div>
 
     <!--Right Col-->
-    <div class="w-full xl:w-3/5 p-12 overflow-hidden min-h-[50vh] bg-purple-700">
-      <img class="mx-auto w-full md:w-4/5 transform -rotate-6 transition hover:scale-105 duration-700 ease-in-out hover:rotate-6" src="macbook.svg" />
+    <div id="heroCanvasContainer" class="z-20 relative w-full xl:w-3/5 overflow-hidden h-[50vh] border  ">
+
     </div>
-  
+
   </div>
 </div>
 </div>
 `
+
+
+export const heroLogic = () => {
+  const container = document.getElementById('heroCanvasContainer')
+  container!.style.backgroundColor = 'transparent';
+  const renderer = new t.WebGLRenderer({ alpha: true })
+  renderer.setSize(container!.clientWidth, container!.clientHeight)
+  container!.appendChild(renderer.domElement)
+
+  const scene = new t.Scene()
+  const camera = new t.PerspectiveCamera(75,window.innerWidth/window.innerHeight,.1,1000,)
+  camera.position.set(0,0,5)
+  
+  //add resize listener
+  window.addEventListener('resize', () => {
+    handleResize()
+  })
+  
+  const handleResize = () => {
+    renderer.setSize(container!.clientWidth, container!.clientHeight)
+    camera.aspect = container!.clientWidth / container!.clientHeight
+    camera.updateProjectionMatrix()
+  }
+  handleResize()
+  
+  // -----MAIN---------
+  
+  
+      // lights
+  const ambientLight = new t.AmbientLight(0xffffff, .5)
+  
+      //box
+  const boxGeometry = new t.BoxGeometry(1,1,1)
+  const boxMaterial = new t.MeshBasicMaterial({ color: 0x00ff0000 }) // basic material does not require light on the scene
+  const box = new t.Mesh(boxGeometry, boxMaterial)
+  
+  
+  //-------   ADS --------------
+  scene.add(ambientLight)
+  scene.add(box)
+  
+  
+  function animate(time:number){
+    box.rotation.x = time/1000 //rads
+    box.rotation.y = time/1000
+    renderer.render(scene, camera)
+  }
+  
+  renderer.setAnimationLoop(animate)
+};
