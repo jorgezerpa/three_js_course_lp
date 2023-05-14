@@ -27,9 +27,3 @@ window.addEventListener('DOMContentLoaded', () => {
   heroLogic();
 });
 
-
-
-
-
-
-
